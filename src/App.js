@@ -97,21 +97,17 @@ class App extends Component {
       });
     });
 
-    var request = {
-      location: Hewitt
-    };
+    //const service = new window.google.maps.places.PlacesService(map);
+    //service.textSearch(request, callback);
 
-    const service = new google.maps.places.PlacesService(map);
-    service.textSearch(request, callback);
-
-    callback = (results, status) => {
+    /*callback = (results, status) => {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
           var place = results[i];
           createMarker(results[i]);
         }
       }
-    };
+    };*/
   }; // End initMap
   handleMarkerClick = marker => {
     this.closeMarkers();
@@ -119,9 +115,10 @@ class App extends Component {
     this.setState({ markers: Object.assign(this.state.markers, marker) });
     const venue = this.state.venues.find(venue => venue.id === marker.id);
   };
-  clickListItem = venue => {
-    //const marker = this.state.markers.find(marker.id === venue.id);
-    console.log(venue);
+  clickListItem = venues => {
+    const marker = this.state.markers.find(marker.id === venues.id);
+    this.handleMarkerClick(marker);
+    console.log(venues.name);
   };
   /*filterMarkers = query => {
     this.markers.forEach(marker => {
