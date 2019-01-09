@@ -13,7 +13,8 @@ class App extends Component {
     super(props);
     this.state = {
       query: "",
-      venues: []
+      venues: [],
+      markers: []
     };
   }
 
@@ -74,60 +75,44 @@ class App extends Component {
           lng: myVenue.venue.location.lng
         },
         map: map,
-        title: myVenue.venue.name
-        //animation: google.maps.Animation.DROP
+        title: myVenue.venue.name,
+        animation: window.google.maps.Animation.DROP
       });
-      this.markers.push(marker);
-      // Enables marker clicks
+
+      /*marker.addListener = ("click", () => {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        } 
+        setTimeOut(() => { marker.setAnimation(null) }, 1500);
+      });*/
+      // InfoWindow Click Event
       marker.addListener("click", () => {
         // Change InfoWindow Content
         infowindow.setContent(contentString);
-
         // Opens an InfoWindow
         infowindow.open(map, marker);
-
-        // Makes a marker bounce
-        /*toggleBounce = () => {
-          if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-          } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-          }
-        };*/
       });
+
+      this.markers.push(marker);
     });
 
-    //const service = new window.google.maps.places.PlacesService(map);
-    //service.textSearch(request, callback);
-
-    /*callback = (results, status) => {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          var place = results[i];
-          createMarker(results[i]);
-        }
-      }
-    };*/
+    //this.setState({ filteredMarkers: this.venues });
   }; // End initMap
-  handleMarkerClick = marker => {
-    this.closeMarkers();
-    marker.isOpen = true;
-    this.setState({ markers: Object.assign(this.state.markers, marker) });
-    const venue = this.state.venues.find(venue => venue.id === marker.id);
-  };
-  clickListItem = venues => {
-    const marker = this.state.markers.find(marker.id === venues.id);
-    this.handleMarkerClick(marker);
-    console.log(venues.name);
-  };
-  /*filterMarkers = query => {
+  // Makes a marker bounce
+
+  filterMarkers = query => {
+    /*this.venues.filter(venue =>
+      venue.title.toLowerCase().includes(query.toLowerCase())
+    );*/
     this.markers.forEach(marker => {
-      marker.name.toLowerCase().includes(query.toLowerCase()) === true
+      marker.title.toLowerCase().includes(query.toLowerCase()) === true
         ? marker.setVisible(true)
         : marker.setVisible(false);
     });
-    this.setState({ query });console.log(query);
-};*/
+    this.setState({ query });
+  };
 
   render() {
     return (
@@ -142,7 +127,7 @@ class App extends Component {
             }}
           />
         </div>
-        <Sidebar {...this.state} clickListItem={this.clickListItem} />
+        <Sidebar {...this.state} onClick={this.state.marker} />
       </main>
     );
   }
