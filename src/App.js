@@ -100,7 +100,13 @@ class App extends Component {
 
     //this.setState({ filteredMarkers: this.venues });
   }; // End initMap
-  // Makes a marker bounce
+  updateList = query => {
+    // Update the query value and filter the list of locations accordingly
+    this.setState({
+      selectedIndex: null,
+      filtered: this.filterMarkers(this.state.venues, query)
+    });
+  };
 
   filterMarkers = query => {
     /*this.venues.filter(venue =>
@@ -112,6 +118,11 @@ class App extends Component {
         : marker.setVisible(false);
     });
     this.setState({ query });
+  };
+
+  clickListItem = venue => {
+    this.marker = this.markers.filter(m => m.title === venue.title)[0];
+    console.log(venue);
   };
 
   render() {
@@ -127,7 +138,11 @@ class App extends Component {
             }}
           />
         </div>
-        <Sidebar {...this.state} onClick={this.state.marker} />
+        <Sidebar
+          {...this.state}
+          clickListItem={this.clickListItem}
+          filterMarkers={this.updateList}
+        />
       </main>
     );
   }
