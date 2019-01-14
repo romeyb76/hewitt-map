@@ -98,6 +98,11 @@ class Sidebar extends Component {
     this.setState({ open: false });
   };
 
+  updateList = newQuery => {
+    this.setState({ query: newQuery });
+    this.props.filterMarkers(newQuery);
+  };
+
   render() {
     const { classes, theme } = this.props;
     const { open } = this.state;
@@ -145,15 +150,30 @@ class Sidebar extends Component {
             </IconButton>
           </div>
           <Divider />
+
+          <div>
+            <input
+              type="text"
+              value={this.state.query}
+              onChange={e => {
+                this.updateList(e.target.value);
+              }}
+            />
+          </div>
           <List>
             {this.props.venues &&
               this.props.venues.map(({ venue }, index) => (
                 <ListItem
                   button
                   key={index}
-                  onClick={() => this.props.clickListItem(this.props)}
+                  onClick={e => this.props.marker(venue)}
                 >
-                  <ListItemText primary={venue.name} />
+                  <ListItemText
+                    primary={venue.name}
+                    onClick={() => {
+                      this.props.clickListItem(venue);
+                    }}
+                  />
                 </ListItem>
               ))}
           </List>
