@@ -13,11 +13,11 @@ class App extends Component {
     super(props);
     this.state = {
       query: "",
-      venues: [],
-      markers: []
+      venues: []
+      //markers: []
     };
   }
-
+  markers = [];
   componentDidMount() {
     this.getVenues();
   }
@@ -79,15 +79,6 @@ class App extends Component {
         animation: window.google.maps.Animation.DROP
       });
 
-      /*marker.addListener = ("click", () => {
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-        } else {
-          marker.setAnimation(window.google.maps.Animation.BOUNCE);
-        } 
-        setTimeOut(() => { marker.setAnimation(null) }, 1500);
-      });*/
-      // InfoWindow Click Event
       marker.addListener("click", () => {
         // Change InfoWindow Content
         infowindow.setContent(contentString);
@@ -121,7 +112,10 @@ class App extends Component {
   };
 
   clickListItem = venue => {
-    this.marker = this.markers.filter(m => m.title === venue.title)[0];
+    const marker = this.markers.find(m => m.name === venue.name)[0];
+
+    /*this.infowindow.setContent(this.contentString);
+    this.infowindow.open(this.map, marker);*/
     console.log(venue);
   };
 
@@ -158,3 +152,4 @@ function loadScript(url) {
 }
 
 export default App;
+
