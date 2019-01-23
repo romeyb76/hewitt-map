@@ -163,15 +163,11 @@ class Sidebar extends Component {
           <List>
             {this.props.venues &&
               this.props.venues.map(({ venue }, index) => (
-                <ListItem
-                  button
-                  key={index}
-                  onClick={e => this.props.marker(venue)}
-                >
+                <ListItem button key={index}>
                   <ListItemText
                     primary={venue.name}
                     onClick={() => {
-                      this.props.clickListItem(venue);
+                      this.props.showListItems(venue);
                     }}
                   />
                 </ListItem>
