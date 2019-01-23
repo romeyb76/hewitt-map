@@ -76,19 +76,15 @@ const styles = theme => ({
     }),
     marginLeft: 0
   }
-});
+}); 
+
+// Code using Materials UI as a resource: https://material-ui.com/
 
 class Sidebar extends Component {
   state = {
     open: false,
     query: ""
   };
-
-  /*constructor(props) {
-    super(props);
-    this.state = {
-      query: ""
-    };*/
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -106,7 +102,7 @@ class Sidebar extends Component {
   render() {
     const { classes, theme } = this.props;
     const { open } = this.state;
-    //const venues = this.props.venues;
+    
 
     return (
       <div className={classes.root}>

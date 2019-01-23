@@ -4,20 +4,16 @@ import axios from "axios";
 import Sidebar from "./components/Sidebar";
 
 class App extends Component {
-  /*state = {
-    venues: [],
-    markers: [],
-    query: ""
-  };*/
+  
   constructor(props) {
     super(props);
     this.state = {
       query: "",
       venues: []
-      //markers: []
     };
   }
   markers = [];
+  
   componentDidMount() {
     this.getVenues();
   }
@@ -46,9 +42,12 @@ class App extends Component {
       })
       .catch(error => {
         console.log("ERROR! " + error);
+		alert("An error has occured.")
       });
   };
 
+  // Source: Google Maps API documentation: https://developers.google.com/maps/documentation/javascript/tutorial
+  
   loadMap = () => {
     loadScript(
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyBzIIxexz8vA1DDmjY9vLLIeIJOX2uBCP4&callback=initMap"
@@ -56,6 +55,8 @@ class App extends Component {
     window.initMap = this.initMap;
   };
 
+  //Loads map with default location
+  
   initMap = () => {
     const map = new window.google.maps.Map(document.getElementById("map"), {
       center: { lat: 31.462391, lng: -97.195839 },
@@ -65,7 +66,8 @@ class App extends Component {
     // Create An InfoWindow
     const infowindow = new window.google.maps.InfoWindow();
 
-    // Display dynamic markers
+    // Display dynamic markers and infoWindow content
+	
     this.state.venues.map(myVenue => {
       const contentString = `${myVenue.venue.name}`;
 
@@ -79,6 +81,8 @@ class App extends Component {
         animation: window.google.maps.Animation.DROP
       });
 
+	  // Opens infoWindow when marker is clicked
+	  
       marker.addListener("click", () => {
         // Change InfoWindow Content
         infowindow.setContent(contentString);
@@ -87,12 +91,14 @@ class App extends Component {
         marker.setAnimation(window.google.maps.Animation.BOUNCE);
         setTimeout(() => marker.setAnimation(null), 1000);
       });
-
-      this.markers.push(marker);
-    });
+	
+      this.markers.push(marker); // Makes the markers appear on map
+    }); 
+	
+	// Opens markers when list item is clicked.  Training courtesy of kenjournal
     window.markers = this.markers;
-    window.infowindow = this.infowindow;
-    //this.setState({ filteredMarkers: this.venues });
+    window.infowindow = infowindow;
+    
   }; // End initMap
   updateList = query => {
     // Update the query value and filter the list of locations accordingly
@@ -112,14 +118,18 @@ class App extends Component {
         : marker.setVisible(false);
     });
     this.setState({ query });
-  };
-
+  }
+ 
+  // Method that enables the selection of markers by clicking on list item. Training courtesy of kenjournal
+  
   clickListItem = venue => {
     //const marker = this.markers.find(m => m.name === venue.name)[0];
     for (let i = 0; i < window.markers.length; i++) {
       if (venue.name === window.markers[i].title) {
+        window.infowindow.setContent(venue.name);
         window.infowindow.open(window.map, window.markers[i]);
         window.markers[i].setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(() => window.markers[i].setAnimation(null), 1000);
       }
     }
   };
@@ -127,7 +137,7 @@ class App extends Component {
   render() {
     return (
       <main>
-        <div id="map" />
+        <div id="map" role="application" aria-label="map"/>
         <div>
           <input
             type="text"
@@ -148,6 +158,7 @@ class App extends Component {
   }
 }
 
+// Loads the API script. Training courtesy of Yahya Elharony
 function loadScript(url) {
   var index = window.document.getElementsByTagName("script")[0];
   var script = window.document.createElement("script");
@@ -158,5 +169,3 @@ function loadScript(url) {
 }
 
 export default App;
-
-

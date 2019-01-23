@@ -42,12 +42,12 @@ body {
   padding: 0;
 }
 
-/*.App#sidebar {
+/*#sidebar {
   position: absolute;
   z-index: 100;
   box-shadow: 0px 1px 1px grey;
   background: grey;
-  width: 325px;
+  width: 20%;
   max-width: 100%;
   height: calc(100vh - 60px);
   overflow-y: scroll;
