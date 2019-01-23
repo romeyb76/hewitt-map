@@ -84,11 +84,14 @@ class App extends Component {
         infowindow.setContent(contentString);
         // Opens an InfoWindow
         infowindow.open(map, marker);
+        marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(() => marker.setAnimation(null), 1000);
       });
 
       this.markers.push(marker);
     });
-
+    window.markers = this.markers;
+    window.infowindow = this.infowindow;
     //this.setState({ filteredMarkers: this.venues });
   }; // End initMap
   updateList = query => {
@@ -112,11 +115,13 @@ class App extends Component {
   };
 
   clickListItem = venue => {
-    const marker = this.markers.find(m => m.name === venue.name)[0];
-
-    /*this.infowindow.setContent(this.contentString);
-    this.infowindow.open(this.map, marker);*/
-    console.log(venue);
+    //const marker = this.markers.find(m => m.name === venue.name)[0];
+    for (let i = 0; i < window.markers.length; i++) {
+      if (venue.name === window.markers[i].title) {
+        window.infowindow.open(window.map, window.markers[i]);
+        window.markers[i].setAnimation(window.google.maps.Animation.BOUNCE);
+      }
+    }
   };
 
   render() {
@@ -132,9 +137,10 @@ class App extends Component {
             }}
           />
         </div>
+
         <Sidebar
           {...this.state}
-          clickListItem={this.clickListItem}
+          showListItems={this.clickListItem}
           filterMarkers={this.updateList}
         />
       </main>
@@ -152,4 +158,5 @@ function loadScript(url) {
 }
 
 export default App;
+
 
